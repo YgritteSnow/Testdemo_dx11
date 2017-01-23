@@ -88,3 +88,6 @@ $RECYCLE.BIN/
 *.iobj
 /*/Release
 *.pdb
+*.log
+*.tlog
+*.opensdf

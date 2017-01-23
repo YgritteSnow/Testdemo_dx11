@@ -17,6 +17,7 @@ ID3D11RenderTargetView* g_renderTargetView = NULL;
 LRESULT CALLBACK winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 HRESULT Init(HINSTANCE hinst, int nCmdShow);
 HRESULT InitDevice();
+void SetRenderData();
 void Render();
 void Destroy();
 
@@ -160,6 +161,10 @@ void Destroy(){
 		g_renderTargetView->Release();
 		g_renderTargetView = NULL;
 	}
+}
+
+void SetRenderData(){
+
 }
 
 void Render(){

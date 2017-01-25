@@ -110,8 +110,8 @@ HRESULT InitDevice(){
 	swapChainDesc.BufferCount = 1;
 	swapChainDesc.BufferDesc.Width = g_width;
 	swapChainDesc.BufferDesc.Height = g_height;
-	swapChainDesc.BufferDesc.RefreshRate.Numerator = 0;
-	swapChainDesc.BufferDesc.RefreshRate.Denominator = 60;
+	swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
+	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
 	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	swapChainDesc.Windowed = true;
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
@@ -145,6 +145,8 @@ HRESULT InitDevice(){
 	}
 	pBackBuffer->Release();
 	pBackBuffer = NULL;
+
+	g_immediateContext->OMSetRenderTargets(1, &g_renderTargetView, NULL);
 
 	// setup viewport
 	D3D11_VIEWPORT viewPort;
@@ -304,7 +306,8 @@ void ClearDevice(){
 	_RELEASEPOINTER(g_inputLayout);
 }
 
-LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
+{
 	PAINTSTRUCT ps;
 	HDC hdc;
 	switch (msg) {
@@ -336,7 +339,6 @@ void Render(){
 
 	g_immediateContext->VSSetShader(g_vertexShader, NULL, 0);
 	g_immediateContext->PSSetShader(g_pixelShader, NULL, 0);
-
 	g_immediateContext->Draw(3, 0);
 
 	g_swapChain->Present(NULL, NULL);

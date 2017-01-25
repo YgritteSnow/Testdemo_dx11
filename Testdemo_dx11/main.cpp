@@ -22,6 +22,7 @@ struct SimpleVertex{
 };
 
 ID3D11VertexShader* g_vertexShader = NULL;
+ID3D11InputLayout* g_inputLayout = NULL;
 ID3D11PixelShader* g_pixelShader = NULL;
 
 HWND g_hwnd = NULL;
@@ -44,11 +45,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		ClearDevice();
 		return 0;
 	}
-	if (FAILED(InitVertexes())){
+	if (FAILED(InitShaders())) {
 		ClearDevice();
 		return 0;
 	}
-	if (FAILED(InitShaders())){
+	if (FAILED(InitVertexes())){
 		ClearDevice();
 		return 0;
 	}
@@ -231,9 +232,19 @@ HRESULT InitVertexShader(){
 		vsBlob->Release();
 		return hr;
 	}
+
+	// setup input layout
+	D3D11_INPUT_ELEMENT_DESC inputLayout[] = {
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,
+		D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+	hr = g_device->CreateInputLayout(inputLayout, ARRAYSIZE(inputLayout),
+		vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &g_inputLayout);
 	vsBlob->Release();
-
-
+	if (FAILED(hr)) {
+		return hr;
+	}
+	g_immediateContext->IASetInputLayout(g_inputLayout);
 
 	return S_OK;
 }
@@ -261,12 +272,11 @@ HRESULT InitPixelShader(){
 	}
 
 	hr = g_device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), NULL, &g_pixelShader);
+	psBlob->Release();
 	if (FAILED(hr)){
-		psBlob->Release();
 		return hr;
 	}
 
-	psBlob->Release();
 	return S_OK;
 }
 
@@ -291,10 +301,17 @@ void ClearDevice(){
 	_RELEASEPOINTER(g_vertexBuffer);
 	_RELEASEPOINTER(g_vertexShader);
 	_RELEASEPOINTER(g_pixelShader);
+	_RELEASEPOINTER(g_inputLayout);
 }
 
-LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam){
-	switch (msg){
+LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+	PAINTSTRUCT ps;
+	HDC hdc;
+	switch (msg) {
+	case WM_PAINT:
+		hdc = BeginPaint(hwnd, &ps);
+		EndPaint(hwnd, &ps);
+		break;
 	case WM_QUIT:
 		DestroyWindow(0);
 		break;

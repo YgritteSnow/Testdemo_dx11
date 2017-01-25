@@ -10,10 +10,18 @@
     <Filter Include="Models">
       <UniqueIdentifier>{eef787a2-e0d3-425f-b005-6328e16d5084}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{32d5dbcf-8241-42c0-8ade-44bcb22c7ae6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Model.h">
       <Filter>Models</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="test.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

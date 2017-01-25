@@ -2,10 +2,9 @@
 #define __MODEL_H__
 
 #include <d3d11.h>
-#include <d3dx1>
+#include <d3dx11.h>
 
 class ModelManager{
 public:
-	static 
 };
 #endif

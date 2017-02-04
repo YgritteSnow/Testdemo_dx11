@@ -1,10 +1,16 @@
-#ifndef __MODEL_H__
-#define __MODEL_H__
+#pragma once
 
-#include <d3d11.h>
-#include <d3dx11.h>
+#include "Mesh.h"
+#include "Shader.h"
 
-class ModelManager{
+class Model {
 public:
+	Model();
+	~Model();
+
+	HRESULT Load();
+	void Render();
+
+private:
+	Mesh* m_mesh;
 };
-#endif

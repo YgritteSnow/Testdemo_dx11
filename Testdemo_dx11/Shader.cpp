@@ -1,38 +1,59 @@
 #include "Shader.h"
 
 #include <d3dx11.h>
+#include <xnamath.h>
 #include <d3dcompiler.h>
 #include <tchar.h>
+
 #include "Utilities.h"
 #include "Device.h"
 
-ShaderManager* ShaderManager::m_instance = NULL;
+extern ID3D11Device* JJ_TEST_DEMO::g_device;
+extern ID3D11DeviceContext* JJ_TEST_DEMO::g_immediateContext;
+/************************************************************************/
+/*                                                                      */
+/************************************************************************/
+Shader::Shader()
+	:m_vertexShader(NULL)
+	, m_pixelShader(NULL)
+	, m_inputLayout(NULL)
+	, m_constantBuffer(NULL) 
+{}
 
-HRESULT ShaderManager::Init(ID3D11Device* device, ID3D11DeviceContext* context) {
-	m_instance = new ShaderManager;
-	if (!m_instance) {
-		return E_FAIL;
-	}
-	if (FAILED(m_instance->InitShaders(device, context))) {
-		return E_FAIL;
-	}
-	return S_OK;
-}
-
-void ShaderManager::Uninit() {
-	if (m_instance) {
-		delete m_instance;
-		m_instance = NULL;
-	}
-}
-
-ShaderManager::~ShaderManager() {
+Shader::~Shader() {
 	Utilities::ReleaseCom(m_vertexShader);
 	Utilities::ReleaseCom(m_pixelShader);
 	Utilities::ReleaseCom(m_inputLayout);
 }
 
-HRESULT ShaderManager::InitShaders(ID3D11Device* device, ID3D11DeviceContext* context) {
+HRESULT Shader::Load() {
+	return InitShaders(JJ_TEST_DEMO::g_device, JJ_TEST_DEMO::g_immediateContext);
+}
+
+struct ModelConstantBuffer {
+	XMMATRIX world;
+	XMMATRIX view;
+	XMMATRIX projection;
+};
+
+void Shader::Render() {
+	ModelConstantBuffer cb;
+	ZeroMemory(&cb, sizeof(cb));
+	cb.world = XMMatrixIdentity();
+	cb.view = XMMatrixTranspose(XMMatrixLookAtLH(
+		XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f),
+		XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f),
+		XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)));
+	cb.projection = XMMatrixTranspose(XMMatrixPerspectiveFovLH(XM_PIDIV2, float(JJ_TEST_DEMO::g_width) / JJ_TEST_DEMO::g_height, 0.1f, 100.f));
+
+	JJ_TEST_DEMO::g_immediateContext->UpdateSubresource(m_constantBuffer, 0, NULL, &cb, 0, 0);
+
+	JJ_TEST_DEMO::g_immediateContext->VSSetConstantBuffers(0, 1, &m_constantBuffer);
+	JJ_TEST_DEMO::g_immediateContext->VSSetShader(m_vertexShader, NULL, 0);
+	JJ_TEST_DEMO::g_immediateContext->PSSetShader(m_pixelShader, NULL, 0);
+}
+
+HRESULT Shader::InitShaders(ID3D11Device* device, ID3D11DeviceContext* context) {
 	if (FAILED(InitVertexShader(device, context))) {
 		return E_FAIL;
 	}
@@ -45,7 +66,7 @@ HRESULT ShaderManager::InitShaders(ID3D11Device* device, ID3D11DeviceContext* co
 	return S_OK;
 }
 
-HRESULT ShaderManager::InitVertexShader(ID3D11Device* device, ID3D11DeviceContext* context) {
+HRESULT Shader::InitVertexShader(ID3D11Device* device, ID3D11DeviceContext* context) {
 	ID3DBlob* vsBlob;
 	ID3DBlob* logblob;
 	HRESULT hr = E_FAIL;
@@ -96,7 +117,7 @@ HRESULT ShaderManager::InitVertexShader(ID3D11Device* device, ID3D11DeviceContex
 	return S_OK;
 }
 
-HRESULT ShaderManager::InitPixelShader(ID3D11Device* device, ID3D11DeviceContext* context) {
+HRESULT Shader::InitPixelShader(ID3D11Device* device, ID3D11DeviceContext* context) {
 	ID3DBlob* psBlob = NULL;
 	ID3DBlob* logBlob = NULL;
 	HRESULT hr = D3DX11CompileFromFile(_T("test.fx"), NULL, NULL,
@@ -127,12 +148,7 @@ HRESULT ShaderManager::InitPixelShader(ID3D11Device* device, ID3D11DeviceContext
 	return S_OK;
 }
 
-struct ModelConstantBuffer {
-	XMMATRIX world;
-	XMMATRIX view;
-	XMMATRIX projection;
-};
-HRESULT ShaderManager::InitShaderBuffers(ID3D11Device* device, ID3D11DeviceContext* context) {
+HRESULT Shader::InitShaderBuffers(ID3D11Device* device, ID3D11DeviceContext* context) {
 	D3D11_BUFFER_DESC cd;
 	ZeroMemory(&cd, sizeof(cd));
 	cd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -141,21 +157,4 @@ HRESULT ShaderManager::InitShaderBuffers(ID3D11Device* device, ID3D11DeviceConte
 	cd.Usage = D3D11_USAGE_DEFAULT;
 	HRESULT hr = device->CreateBuffer(&cd, NULL, &m_constantBuffer);
 	return hr;
-}
-
-void ShaderManager::Render(ID3D11DeviceContext* context) {
-	ModelConstantBuffer cb;
-	ZeroMemory(&cb, sizeof(cb));
-	cb.world = XMMatrixIdentity();
-	cb.view = XMMatrixTranspose(XMMatrixLookAtLH(
-		XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f),
-		XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f),
-		XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)));
-	cb.projection = XMMatrixTranspose(XMMatrixPerspectiveFovLH(XM_PIDIV2, float(JJ_TEST_DEMO::g_width) / JJ_TEST_DEMO::g_height, 0.1f, 100.f));
-
-	context->UpdateSubresource(m_constantBuffer, 0, NULL, &cb, 0, 0);
-
-	context->VSSetConstantBuffers(0, 1, &m_constantBuffer);
-	context->VSSetShader(m_vertexShader, NULL, 0);
-	context->PSSetShader(m_pixelShader, NULL, 0);
 }

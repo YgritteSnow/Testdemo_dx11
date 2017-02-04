@@ -6,7 +6,7 @@
 
 #include "Device.h"
 #include "ModelManager.h"
-#include "Shader.h"
+#include "ShaderManager.h"
 
 namespace JJ_TEST_DEMO
 {

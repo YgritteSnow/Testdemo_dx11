@@ -15,9 +15,21 @@ HRESULT Model::Load() {
 	if (!m_mesh) {
 		return E_FAIL;
 	}
-	return m_mesh->Load();
+	if (FAILED(m_mesh->Load())) {
+		return E_FAIL;
+	}
+
+	m_shader = new Shader;
+	if (!m_shader) {
+		return E_FAIL;
+	}
+	if (FAILED(m_shader->Load())) {
+		return E_FAIL;
+	}
+	return S_OK;
 }
 
 void Model::Render() {
+	m_shader->Render();
 	m_mesh->Render();
 }

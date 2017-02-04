@@ -6,7 +6,6 @@
 
 #include "Device.h"
 #include "ModelManager.h"
-#include "ShaderManager.h"
 
 namespace JJ_TEST_DEMO
 {
@@ -65,10 +64,6 @@ namespace JJ_TEST_DEMO
 			return E_FAIL;
 		}
 		if (FAILED(ModelManager::Init(g_device, g_immediateContext))) {
-			ClearDevice();
-			return E_FAIL;
-		}
-		if (FAILED(ShaderManager::Init(g_device, g_immediateContext))) {
 			ClearDevice();
 			return E_FAIL;
 		}
@@ -194,7 +189,6 @@ namespace JJ_TEST_DEMO
 		float c[4] = { 1.f, 0.5f, 0.5f, 1.f };
 		g_immediateContext->ClearRenderTargetView(g_renderTargetView, c);
 
-		ShaderManager::GetInstance()->Render(g_immediateContext);
 		ModelManager::GetInstance()->Render(g_immediateContext);
 
 		g_swapChain->Present(NULL, NULL);

@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+#include "ShaderPool.h"
+
 ModelManager* ModelManager::m_instance = NULL;
 
 HRESULT ModelManager::Init(ID3D11Device* device, ID3D11DeviceContext* context) {
@@ -9,6 +11,10 @@ HRESULT ModelManager::Init(ID3D11Device* device, ID3D11DeviceContext* context) {
 		m_instance = new ModelManager;
 	}
 	if (!m_instance) {
+		return E_FAIL;
+	}
+
+	if (FAILED(ShaderPool::Init(device, context))) {
 		return E_FAIL;
 	}
 

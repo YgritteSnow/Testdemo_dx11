@@ -153,9 +153,11 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Model_BezierSurface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Model.h" />
+    <ClInclude Include="Model_BezierSurface.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="test.fx" />

@@ -4,7 +4,13 @@
 #include <d3d11.h>
 #include <d3dx11.h>
 
-class ModelManager{
+class Model
+{
+public:
+};
+
+class ModelManager
+{
 public:
 };
 #endif

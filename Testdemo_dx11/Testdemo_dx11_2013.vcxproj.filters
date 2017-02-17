@@ -5,6 +5,9 @@
     <ClCompile Include="Model.cpp">
       <Filter>Models</Filter>
     </ClCompile>
+    <ClCompile Include="Model_BezierSurface.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Models">
@@ -16,6 +19,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Model.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Model_BezierSurface.h">
       <Filter>Models</Filter>
     </ClInclude>
   </ItemGroup>

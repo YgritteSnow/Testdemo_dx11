@@ -1,9 +1,28 @@
-float4 VS_Main(float4 pos: POSITION) : SV_POSITION
+cbuffer ModelConstantBuffer : register(b0)
 {
-	return pos;
+	matrix World;
+	matrix View;
+	matrix Projection;
 }
 
-float4 PS_Main(float4 pos: SV_POSITION) : SV_Target
+struct VS_OUT {
+	float4 pos : SV_POSITION;
+	float4 color : COLOR0;
+};
+
+VS_OUT VS_Main(float4 pos: POSITION)
 {
-	return float4(0.0f, 0.0f, 1.0f, 1.0f);
+	VS_OUT output = (VS_OUT)0;
+	output.pos = mul(pos, World);
+	output.pos = mul(output.pos, View);
+	output.pos = mul(output.pos, Projection);
+	//return float4(pos.xy, 1.f, 1.f);
+	output.color = float4(float3(World._m00, World._m11, World._m22)/2, 1.f);
+	return output;
+}
+
+float4 PS_Main(VS_OUT input) : SV_Target
+{
+	return input.color;
+	//return float4(float3(World._m00, World._m11, World._m22) / 2, 1.f);
 }

@@ -160,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="test.fx" />
+    <FxCompile Include="test2.fx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Device.h" />

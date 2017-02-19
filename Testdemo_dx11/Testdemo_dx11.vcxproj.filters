@@ -44,6 +44,9 @@
     <FxCompile Include="test.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="test2.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Device.h">

@@ -23,6 +23,10 @@ VS_OUT VS_Main(float4 pos: POSITION)
 
 float4 PS_Main(VS_OUT input) : SV_Target
 {
-	return input.color;
-	//return float4(float3(World._m00, World._m11, World._m22) / 2, 1.f);
+#ifdef FFF
+	return float4(0.f, 1.f, 0.f, 1.f);
+#else
+	return float4(1.f, 0.f, 0.f, 1.f);
+#endif
+	//return input.color;
 }

@@ -14,6 +14,7 @@ namespace JJ_TEST_DEMO
 	extern IDXGISwapChain* g_swapChain;
 	extern D3D_FEATURE_LEVEL g_featureLevel;
 	extern ID3D11RenderTargetView* g_renderTargetView;
+	extern ID3D11DepthStencilView* g_depthStencilView;
 
 	extern HWND g_hwnd;
 	extern HINSTANCE g_instance;

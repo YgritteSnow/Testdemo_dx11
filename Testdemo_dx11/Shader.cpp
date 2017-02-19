@@ -50,6 +50,7 @@ void Shader::Render() {
 
 	JJ_TEST_DEMO::g_immediateContext->VSSetConstantBuffers(0, 1, &m_constantBuffer);
 	JJ_TEST_DEMO::g_immediateContext->VSSetShader(m_vertexShader, NULL, 0);
+	JJ_TEST_DEMO::g_immediateContext->PSSetConstantBuffers(0, 1, &m_constantBuffer);
 	JJ_TEST_DEMO::g_immediateContext->PSSetShader(m_pixelShader, NULL, 0);
 }
 
@@ -70,7 +71,7 @@ HRESULT Shader::InitVertexShader(ID3D11Device* device, ID3D11DeviceContext* cont
 	ID3DBlob* vsBlob;
 	ID3DBlob* logblob;
 	HRESULT hr = E_FAIL;
-	hr = D3DX11CompileFromFile(_T("test.fx"), NULL, NULL,
+	hr = D3DX11CompileFromFile(_T("test2.fx"), NULL, NULL,
 		"VS_Main", "vs_4_0",
 		D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG,
 		0, NULL,
@@ -120,7 +121,7 @@ HRESULT Shader::InitVertexShader(ID3D11Device* device, ID3D11DeviceContext* cont
 HRESULT Shader::InitPixelShader(ID3D11Device* device, ID3D11DeviceContext* context) {
 	ID3DBlob* psBlob = NULL;
 	ID3DBlob* logBlob = NULL;
-	HRESULT hr = D3DX11CompileFromFile(_T("test.fx"), NULL, NULL,
+	HRESULT hr = D3DX11CompileFromFile(_T("test2.fx"), NULL, NULL,
 		"PS_Main", "ps_4_0",
 		D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG, 0,
 		NULL,

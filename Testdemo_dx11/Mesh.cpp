@@ -1,13 +1,19 @@
 #include "Mesh.h"
 #include "Device.h"
+#include <tchar.h>
 
 extern ID3D11DeviceContext* JJ_TEST_DEMO::g_immediateContext;
 extern ID3D11Device* JJ_TEST_DEMO::g_device;
+extern HWND JJ_TEST_DEMO::g_hwnd;
 
 Mesh::Mesh()
 	: m_vertexBuffer(NULL)
 	, m_indiceBuffer(NULL)
 {
+	if (FAILED(Load()))
+	{
+		MessageBox(JJ_TEST_DEMO::g_hwnd, _T("Cannot load mesh!"), _T("en."), 0);
+	}
 }
 
 Mesh::~Mesh() {

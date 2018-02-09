@@ -12,21 +12,31 @@ class Model_BezierSurface : public Model
 {
 public:
 	typedef Vertex VertexType;
-	Model_BezierSurface(){}
-	~Model_BezierSurface(){}
+	Model_BezierSurface();
+	~Model_BezierSurface();
+
 public:
-	void OnLoad();
-	void OnDestroy();
-	void GetVertices();
-	void GetIndices();
+
 private:
-	void AddControlPoint(VertexType v);
+	void Clear();
+	void AddTopVertice(VertexType v);
+	void AddBottomVertice(VertexType v);
+	void AddLeftVertice(VertexType v);
+	void AddRightVertice(VertexType v);
 	void GenerateCurve();
 private:
 	bool isDirty;
 	typedef std::vector<VertexType> VertexListType;
 	// 曲面的控制点
-	std::vector<VertexListType> m_vec_controlPoints;
+	// *-*-*-* // col_num = 4, row_num = 3
+	// |     |
+	// *     *
+	// |     |
+	// *-*-*-*
+	VertexListType m_vec_top;
+	VertexListType m_vec_bottom;
+	VertexListType m_vec_left_noedge;
+	VertexListType m_vec_right_noedge;
 	// 生成的mesh的顶点
 	std::vector<VertexType> m_vec_meshVertices;
 	std::vector<DWORD> m_vec_Indices;

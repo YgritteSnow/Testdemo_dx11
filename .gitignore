@@ -91,3 +91,4 @@ $RECYCLE.BIN/
 *.log
 *.tlog
 *.opensdf
+/Testdemo_dx11/x64/Debug/*.idb

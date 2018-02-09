@@ -1,14 +1,13 @@
-#include "ModelManager.h"
+#include "Scene.h"
 
 #include <algorithm>
-
 #include "ShaderPool.h"
 
-ModelManager* ModelManager::m_instance = NULL;
+Scene* Scene::m_instance = NULL;
 
-HRESULT ModelManager::Init(ID3D11Device* device, ID3D11DeviceContext* context) {
+HRESULT Scene::Init(ID3D11Device* device, ID3D11DeviceContext* context) {
 	if (!m_instance) {
-		m_instance = new ModelManager;
+		m_instance = new Scene;
 	}
 	if (!m_instance) {
 		return E_FAIL;
@@ -19,7 +18,7 @@ HRESULT ModelManager::Init(ID3D11Device* device, ID3D11DeviceContext* context) {
 	}
 
 	auto m = new Model;
-	if (FAILED(m->Load())) {
+	if (FAILED(m->Load(""))) {
 		return E_FAIL;
 	}
 
@@ -29,19 +28,19 @@ HRESULT ModelManager::Init(ID3D11Device* device, ID3D11DeviceContext* context) {
 	return S_OK;
 }
 
-void ModelManager::Uninit() {
+void Scene::Uninit() {
 	if (m_instance) {
 		delete m_instance;
 		m_instance = NULL;
 	}
 }
 
-ModelManager::~ModelManager() {
+Scene::~Scene() {
 	for_each(m_vec_models.begin(), m_vec_models.end(), [&](auto& x) {delete x; });
 	m_vec_models.clear();
 }
 
-void ModelManager::Render(ID3D11DeviceContext* context) {
+void Scene::Render() {
 	for_each(m_vec_models.begin(), m_vec_models.end(), [&](auto& x) {
 		x->Render();
 	});

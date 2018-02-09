@@ -5,6 +5,13 @@
 #include <xnamath.h>
 
 /************************************************************************/
+/* A vertex struct which contains only position
+/************************************************************************/
+struct SimpleVertex {
+	XMFLOAT3 pos;
+};
+
+/************************************************************************/
 /* initialize device about model(vertex)
 /************************************************************************/
 class Mesh {
@@ -16,9 +23,6 @@ public:
 	void Render();
 
 private:
-	struct SimpleVertex {
-		XMFLOAT3 pos;
-	};
 	HRESULT InitVertices();
 	HRESULT InitIndices();
 

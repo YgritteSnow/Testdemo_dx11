@@ -50,6 +50,7 @@ void Shader::Render() {
 
 	JJ_TEST_DEMO::g_immediateContext->VSSetConstantBuffers(0, 1, &m_constantBuffer);
 	JJ_TEST_DEMO::g_immediateContext->VSSetShader(m_vertexShader, NULL, 0);
+	JJ_TEST_DEMO::g_immediateContext->PSSetConstantBuffers(0, 1, &m_constantBuffer);
 	JJ_TEST_DEMO::g_immediateContext->PSSetShader(m_pixelShader, NULL, 0);
 }
 

@@ -1,5 +1,5 @@
-#ifndef __MODELMANAGER_H__
-#define __MODELMANAGER_H__
+#ifndef __SCENE_H__
+#define __SCENE_H__
 
 #include <d3d11.h>
 #include <d3dx11.h>
@@ -11,20 +11,22 @@
 /************************************************************************/
 /* initialize device about model(vertex)
 /************************************************************************/
-class ModelManager{
+class Scene{
+private:
+	Scene() {};
+	~Scene();
+
 public:
 	static HRESULT Init(ID3D11Device* device, ID3D11DeviceContext* context);
 	static void Uninit();
-	static ModelManager* GetInstance() {return m_instance;}
-private:
-	~ModelManager();
+	static Scene* GetInstance() {return m_instance;}
 public:
-	void Render(ID3D11DeviceContext* context);
+	void Render();
 
 private:
 	std::vector<Model*> m_vec_models;
 
 private:
-	static ModelManager* m_instance;
+	static Scene* m_instance;
 };
 #endif

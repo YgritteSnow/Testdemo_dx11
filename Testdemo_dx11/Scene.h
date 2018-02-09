@@ -21,6 +21,8 @@ public:
 	static void Uninit();
 	static Scene* GetInstance() {return m_instance;}
 public:
+	void AddModel(Model* model);
+	void RemoveModel(Model* model);
 	void Render();
 
 private:

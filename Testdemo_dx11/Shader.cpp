@@ -3,7 +3,6 @@
 #include <d3dx11.h>
 #include <xnamath.h>
 #include <d3dcompiler.h>
-#include <tchar.h>
 
 #include "Utilities.h"
 #include "Device.h"
@@ -26,8 +25,9 @@ Shader::~Shader() {
 	Utilities::ReleaseCom(m_inputLayout);
 }
 
-HRESULT Shader::Load() {
-	return InitShaders(JJ_TEST_DEMO::g_device, JJ_TEST_DEMO::g_immediateContext);
+HRESULT Shader::Load(const char* n) {
+	name = n;
+	return InitShaders();
 }
 
 struct ModelConstantBuffer {
@@ -37,6 +37,8 @@ struct ModelConstantBuffer {
 };
 
 void Shader::Render() {
+	JJ_TEST_DEMO::g_immediateContext->IASetInputLayout(m_inputLayout);
+
 	ModelConstantBuffer cb;
 	ZeroMemory(&cb, sizeof(cb));
 	cb.world = XMMatrixIdentity();
@@ -45,7 +47,6 @@ void Shader::Render() {
 		XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f),
 		XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)));
 	cb.projection = XMMatrixTranspose(XMMatrixPerspectiveFovLH(XM_PIDIV2, float(JJ_TEST_DEMO::g_width) / JJ_TEST_DEMO::g_height, 0.1f, 100.f));
-
 	JJ_TEST_DEMO::g_immediateContext->UpdateSubresource(m_constantBuffer, 0, NULL, &cb, 0, 0);
 
 	JJ_TEST_DEMO::g_immediateContext->VSSetConstantBuffers(0, 1, &m_constantBuffer);
@@ -54,24 +55,24 @@ void Shader::Render() {
 	JJ_TEST_DEMO::g_immediateContext->PSSetShader(m_pixelShader, NULL, 0);
 }
 
-HRESULT Shader::InitShaders(ID3D11Device* device, ID3D11DeviceContext* context) {
-	if (FAILED(InitVertexShader(device, context))) {
+HRESULT Shader::InitShaders() {
+	if (FAILED(InitVertexShader())) {
 		return E_FAIL;
 	}
-	if (FAILED(InitPixelShader(device, context))) {
+	if (FAILED(InitPixelShader())) {
 		return E_FAIL;
 	}
-	if (FAILED(InitShaderBuffers(device, context))) {
+	if (FAILED(InitShaderBuffers())) {
 		return E_FAIL;
 	}
 	return S_OK;
 }
 
-HRESULT Shader::InitVertexShader(ID3D11Device* device, ID3D11DeviceContext* context) {
+HRESULT Shader::InitVertexShader() {
 	ID3DBlob* vsBlob;
 	ID3DBlob* logblob;
 	HRESULT hr = E_FAIL;
-	hr = D3DX11CompileFromFile(_T("test.fx"), NULL, NULL,
+	hr = D3DX11CompileFromFileA(name.c_str(), NULL, NULL,
 		"VS_Main", "vs_4_0",
 		D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG,
 		0, NULL,
@@ -94,7 +95,7 @@ HRESULT Shader::InitVertexShader(ID3D11Device* device, ID3D11DeviceContext* cont
 		logblob->Release();
 	}
 
-	hr = device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), NULL, &m_vertexShader);
+	hr = JJ_TEST_DEMO::g_device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), NULL, &m_vertexShader);
 	if (FAILED(hr)) {
 		vsBlob->Release();
 		return hr;
@@ -107,21 +108,20 @@ HRESULT Shader::InitVertexShader(ID3D11Device* device, ID3D11DeviceContext* cont
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12,
 		D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
-	hr = device->CreateInputLayout(inputLayout, ARRAYSIZE(inputLayout),
+	hr = JJ_TEST_DEMO::g_device->CreateInputLayout(inputLayout, ARRAYSIZE(inputLayout),
 		vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &m_inputLayout);
 	vsBlob->Release();
 	if (FAILED(hr)) {
 		return hr;
 	}
-	context->IASetInputLayout(m_inputLayout);
 
 	return S_OK;
 }
 
-HRESULT Shader::InitPixelShader(ID3D11Device* device, ID3D11DeviceContext* context) {
+HRESULT Shader::InitPixelShader() {
 	ID3DBlob* psBlob = NULL;
 	ID3DBlob* logBlob = NULL;
-	HRESULT hr = D3DX11CompileFromFile(_T("test.fx"), NULL, NULL,
+	HRESULT hr = D3DX11CompileFromFileA(name.c_str(), NULL, NULL,
 		"PS_Main", "ps_4_0",
 		D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG, 0,
 		NULL,
@@ -140,7 +140,7 @@ HRESULT Shader::InitPixelShader(ID3D11Device* device, ID3D11DeviceContext* conte
 		logBlob->Release();
 	}
 
-	hr = device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), NULL, &m_pixelShader);
+	hr = JJ_TEST_DEMO::g_device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), NULL, &m_pixelShader);
 	psBlob->Release();
 	if (FAILED(hr)) {
 		return hr;
@@ -149,13 +149,13 @@ HRESULT Shader::InitPixelShader(ID3D11Device* device, ID3D11DeviceContext* conte
 	return S_OK;
 }
 
-HRESULT Shader::InitShaderBuffers(ID3D11Device* device, ID3D11DeviceContext* context) {
+HRESULT Shader::InitShaderBuffers() {
 	D3D11_BUFFER_DESC cd;
 	ZeroMemory(&cd, sizeof(cd));
 	cd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	cd.ByteWidth = sizeof(ModelConstantBuffer);
 	cd.CPUAccessFlags = 0;
 	cd.Usage = D3D11_USAGE_DEFAULT;
-	HRESULT hr = device->CreateBuffer(&cd, NULL, &m_constantBuffer);
+	HRESULT hr = JJ_TEST_DEMO::g_device->CreateBuffer(&cd, NULL, &m_constantBuffer);
 	return hr;
 }

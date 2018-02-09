@@ -62,9 +62,6 @@ HRESULT Mesh::InitVertices() {
 		return hr;
 	}
 
-	UINT stride = sizeof(SimpleVertex);
-	UINT offset = 0;
-	JJ_TEST_DEMO::g_immediateContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
 
 	return S_OK;
 }
@@ -98,14 +95,14 @@ HRESULT Mesh::InitIndices() {
 		return hr;
 	}
 
-	UINT offset = 0;
-	JJ_TEST_DEMO::g_immediateContext->IASetIndexBuffer(m_indiceBuffer, DXGI_FORMAT_R16_UINT, 0);
-
-	JJ_TEST_DEMO::g_immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
 	return S_OK;
 }
 
 void Mesh::Render() {
+	UINT stride = sizeof(SimpleVertex);
+	UINT offset = 0;
+	JJ_TEST_DEMO::g_immediateContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
+	JJ_TEST_DEMO::g_immediateContext->IASetIndexBuffer(m_indiceBuffer, DXGI_FORMAT_R16_UINT, 0);
+	JJ_TEST_DEMO::g_immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	JJ_TEST_DEMO::g_immediateContext->DrawIndexed(24, 0, 0);
 }

@@ -161,6 +161,7 @@
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ModelPool.cpp" />
     <ClCompile Include="Model_Quad.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Model_BezierSurface.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="JJMath\template_func.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="ModelPool.h" />
     <ClInclude Include="Model_Quad.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Model_BezierSurface.h" />

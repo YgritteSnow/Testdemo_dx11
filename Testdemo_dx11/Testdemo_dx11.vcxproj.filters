@@ -16,7 +16,7 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\JJMath">
+    <Filter Include="Source Files\Utility">
       <UniqueIdentifier>{bafd3eb7-e9c7-459d-9cdc-1068245254f6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -48,6 +48,9 @@
     <ClCompile Include="EntryPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ModelPool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Device.h">
@@ -69,13 +72,13 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="JJMath\bezier_curve.h">
-      <Filter>Source Files\JJMath</Filter>
+      <Filter>Source Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="JJMath\template_const.h">
-      <Filter>Source Files\JJMath</Filter>
+      <Filter>Source Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="JJMath\template_func.h">
-      <Filter>Source Files\JJMath</Filter>
+      <Filter>Source Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Source Files</Filter>
@@ -84,6 +87,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Model.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelPool.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,6 +6,8 @@
 
 #include "Device.h"
 #include "Scene.h"
+#include "ShaderPool.h"
+#include "ModelPool.h"
 
 namespace JJ_TEST_DEMO
 {
@@ -59,6 +61,12 @@ namespace JJ_TEST_DEMO
 		return S_OK;
 	}
 
+	void SetupScene()
+	{
+		auto m = ModelPool::GetInstance()->GetModel("");
+		Scene::GetInstance()->AddModel(m);
+	}
+
 	HRESULT InitAll() {
 		if (FAILED(InitDevice())) {
 			ClearDevice();
@@ -68,6 +76,12 @@ namespace JJ_TEST_DEMO
 			ClearDevice();
 			return E_FAIL;
 		}
+		if (FAILED(ShaderPool::Init())) {
+			return E_FAIL;
+		}
+
+		SetupScene();
+
 		return S_OK;
 	}
 

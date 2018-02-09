@@ -1,6 +1,7 @@
 #pragma once
 
 #include <d3d11.h>
+#include <string>
 
 class Shader
 {
@@ -8,15 +9,16 @@ public:
 	Shader();
 	~Shader();
 
-	HRESULT Load();
+	HRESULT Load(const char* name);
 	void Render();
 
 private:
-	HRESULT InitShaders(ID3D11Device* device, ID3D11DeviceContext* context);
-	HRESULT InitVertexShader(ID3D11Device* device, ID3D11DeviceContext* context);
-	HRESULT InitPixelShader(ID3D11Device* device, ID3D11DeviceContext* context);
-	HRESULT InitShaderBuffers(ID3D11Device* device, ID3D11DeviceContext* context);
+	HRESULT InitShaders();
+	HRESULT InitVertexShader();
+	HRESULT InitPixelShader();
+	HRESULT InitShaderBuffers();
 private:
+	std::string name;
 	ID3D11VertexShader* m_vertexShader;
 	ID3D11PixelShader* m_pixelShader;
 	ID3D11InputLayout* m_inputLayout;

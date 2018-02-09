@@ -1,7 +1,6 @@
 #include "Scene.h"
 
 #include <algorithm>
-#include "ShaderPool.h"
 
 Scene* Scene::m_instance = NULL;
 
@@ -13,17 +12,7 @@ HRESULT Scene::Init(ID3D11Device* device, ID3D11DeviceContext* context) {
 		return E_FAIL;
 	}
 
-	if (FAILED(ShaderPool::Init(device, context))) {
-		return E_FAIL;
-	}
-
-	auto m = new Model;
-	if (FAILED(m->Load(""))) {
-		return E_FAIL;
-	}
-
 	m_instance->m_vec_models.clear();
-	m_instance->m_vec_models.push_back(m);
 
 	return S_OK;
 }
@@ -35,8 +24,17 @@ void Scene::Uninit() {
 	}
 }
 
+void Scene::AddModel(Model* model)
+{
+	m_instance->m_vec_models.push_back(model);
+}
+void Scene::RemoveModel(Model* model)
+{
+	m_instance->m_vec_models.erase(std::remove_if(m_instance->m_vec_models.begin(), m_instance->m_vec_models.end(),
+		[&model](Model*& m) {return m == model; }));
+}
+
 Scene::~Scene() {
-	for_each(m_vec_models.begin(), m_vec_models.end(), [&](auto& x) {delete x; });
 	m_vec_models.clear();
 }
 

@@ -5,7 +5,7 @@
 /************************************************************************/
 ShaderPool* ShaderPool::m_instance = NULL;
 
-HRESULT ShaderPool::Init(ID3D11Device* device, ID3D11DeviceContext* context) {
+HRESULT ShaderPool::Init() {
 	m_instance = new ShaderPool;
 	if (!m_instance) {
 		return E_FAIL;
@@ -18,4 +18,11 @@ void ShaderPool::Uninit() {
 		delete m_instance;
 		m_instance = NULL;
 	}
+}
+
+Shader* ShaderPool::GetShader(const char* name)
+{
+	Shader* res = new Shader();
+	res->Load(name);
+	return res;
 }

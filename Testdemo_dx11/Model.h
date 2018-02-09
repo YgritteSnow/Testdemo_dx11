@@ -5,6 +5,7 @@
 #include <d3dx11.h>
 
 #include "Mesh.h"
+#include "ShaderPool.h"
 
 class Model
 {
@@ -18,12 +19,16 @@ public:
 		if (m_mesh == nullptr)
 			return false;
 
+		m_shader = ShaderPool::GetInstance()->GetShader("test.fx");
+		if (m_shader == nullptr)
+			return false;
+
 		OnLoad();
 		return true;
 	}
 	void Render() {
 		BeforeRender();
-		m_mesh->Render();
+		RealRender();
 		AfterRender();
 	}
 	void Destroy() {
@@ -41,8 +46,8 @@ private:
 	void RealRender();
 
 protected:
-	
 	Mesh* m_mesh;
+	Shader* m_shader;
 };
 
 #endif

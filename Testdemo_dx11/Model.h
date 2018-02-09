@@ -9,8 +9,4 @@ class Model
 public:
 };
 
-class ModelManager
-{
-public:
-};
 #endif

@@ -7,6 +7,7 @@
 
 #include "device.h"
 
+//void main(){}
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd){
 	if (FAILED(JJ_TEST_DEMO::InitWindow(hInstance, nShowCmd)))
 		return 0;

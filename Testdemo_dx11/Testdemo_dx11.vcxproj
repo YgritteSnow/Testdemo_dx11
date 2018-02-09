@@ -159,7 +159,10 @@
     <ClCompile Include="ShaderPool.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="test.fx" />
+    <FxCompile Include="test.fx">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Device.h" />

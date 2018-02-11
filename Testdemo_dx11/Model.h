@@ -15,7 +15,7 @@ public:
 
 public:
 	bool Load(const char* filename) {
-		m_mesh = new Mesh();
+		m_mesh = new Mesh(filename);
 		if (m_mesh == nullptr)
 			return false;
 

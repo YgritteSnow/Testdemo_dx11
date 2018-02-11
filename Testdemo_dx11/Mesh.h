@@ -16,15 +16,18 @@ struct SimpleVertex {
 /************************************************************************/
 class Mesh {
 public:
-	Mesh();
+	Mesh(const char* filename);
 	~Mesh();
 
-	HRESULT Load();
+	HRESULT Load(const char* filename);
 	void Render();
 
 private:
-	HRESULT InitVertices();
-	HRESULT InitIndices();
+	HRESULT InitMesh(const char* filename);
+
+	HRESULT InitDefaultMesh();
+	HRESULT InitDefaultVertices();
+	HRESULT InitDefaultIndices();
 
 private:
 	ID3D11Buffer* m_vertexBuffer = NULL;

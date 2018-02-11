@@ -1,16 +1,17 @@
 #include "Mesh.h"
-#include "Device.h"
+
 #include <tchar.h>
+#include "Device.h"
 
 extern ID3D11DeviceContext* JJ_TEST_DEMO::g_immediateContext;
 extern ID3D11Device* JJ_TEST_DEMO::g_device;
 extern HWND JJ_TEST_DEMO::g_hwnd;
 
-Mesh::Mesh()
+Mesh::Mesh(const char* filename)
 	: m_vertexBuffer(NULL)
 	, m_indiceBuffer(NULL)
 {
-	if (FAILED(Load()))
+	if (FAILED(Load(filename)))
 	{
 		MessageBox(JJ_TEST_DEMO::g_hwnd, _T("Cannot load mesh!"), _T("en."), 0);
 	}
@@ -23,17 +24,24 @@ Mesh::~Mesh() {
 	}
 }
 
-HRESULT Mesh::Load() {
-	if (FAILED(InitVertices())) {
-		return E_FAIL;
-	}
-	if (FAILED(InitIndices())) {
-		return E_FAIL;
-	}
-	return S_OK;
+HRESULT Mesh::Load(const char* filename) {
+	return InitMesh(filename);
 }
 
-HRESULT Mesh::InitVertices() {
+HRESULT Mesh::InitMesh(const char* filename) {
+	return E_FAIL;
+}
+
+HRESULT Mesh::InitDefaultMesh() {
+	if (FAILED(InitDefaultVertices())) {
+		return E_FAIL;
+	}
+	if (FAILED(InitDefaultIndices())) {
+		return E_FAIL;
+	}
+}
+
+HRESULT Mesh::InitDefaultVertices() {
 	SimpleVertex vertexes[] = {
 		XMFLOAT3(-0.5f, -0.5f, -0.5f),
 		XMFLOAT3(0.5f, -0.5f, -0.5f),
@@ -66,7 +74,7 @@ HRESULT Mesh::InitVertices() {
 	return S_OK;
 }
 
-HRESULT Mesh::InitIndices() {
+HRESULT Mesh::InitDefaultIndices() {
 	WORD indices[] = {
 		0,1,2,
 		0,2,3,

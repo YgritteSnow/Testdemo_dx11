@@ -89,5 +89,8 @@
     <ClInclude Include="ModelPool.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="Model\JFbxManager.h">
+      <Filter>Source Files\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

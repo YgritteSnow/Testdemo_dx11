@@ -178,6 +178,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelPool.h" />
+    <ClInclude Include="Model\JFbxManager.h" />
     <ClInclude Include="Model_Quad.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Model_BezierSurface.h" />
